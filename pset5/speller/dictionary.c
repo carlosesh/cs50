@@ -27,26 +27,16 @@ node *table[N];
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    unsigned int hashValue = hash(word);
+    node *current = table[hash(word)];
 
-    node current = *table[hashValue];
-
-    while (current.next != NULL)
+    while (current != NULL)
     {
-        if (strcasecmp(current.word, word) == 0)
+        if (strcasecmp(current->word, word) == 0)
         {
             return true;
         }
 
-        current = *current.next;
-    }
-
-    if (current.next == NULL)
-    {
-        if (strcasecmp(current.word, word) == 0)
-        {
-            return true;
-        }
+        current = current->next;
     }
 
     return false;
@@ -129,7 +119,7 @@ unsigned int size(void)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    for (int i = 0; i < 26; i++)
+    for (int i = 0; i < N; i++)
     {
         //logic was taken from here -> https://www.gnu.org/software/libc/manual/html_node/Freeing-after-Malloc.html
         while (table[i] != NULL)
